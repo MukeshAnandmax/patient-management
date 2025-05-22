@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -32,10 +33,10 @@ public class Patient {
     private String address;
 
     @NotNull
-    private LocalDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
 
 
     @NotNull
-    private LocalDateTime registered_date;
+    private LocalDate registered_date;
 
 }
