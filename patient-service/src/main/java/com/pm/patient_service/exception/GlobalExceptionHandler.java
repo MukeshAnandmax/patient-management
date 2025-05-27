@@ -33,4 +33,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorMap);
     }
 
+    @ExceptionHandler(PatentNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlePatentNotFoundException(PatentNotFoundException ex) {
+
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("message", ex.getMessage());
+        log.warn("PatentNotFoundException: {}",  ex.getMessage());
+        return ResponseEntity.badRequest().body(errorMap);
+    }
+
 }
