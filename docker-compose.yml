@@ -18,7 +18,7 @@ services:
 
   patient-service:
     build:
-      context: .
+      context: ./patient-service
       dockerfile: Dockerfile
     container_name: patient-service
     ports:
@@ -32,8 +32,20 @@ services:
     networks:
       - backend
 
+  billing-service:
+    build:
+      context: ./billing-service
+      dockerfile: Dockerfile
+    container_name: billing-service
+    ports:
+      - "4001:4001"
+      - "9001:9001"
+    networks:
+      - backend
+
 volumes:
   postgres-data:
 
 networks:
   backend:
+    driver: bridge
