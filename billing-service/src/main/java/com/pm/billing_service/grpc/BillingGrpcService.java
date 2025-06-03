@@ -17,7 +17,7 @@ public class BillingGrpcService extends BillingServiceImplBase {
 
 
         BillingResponse response = BillingResponse.newBuilder()
-                .setAccountId("test")
+                .setAccountId(request.getPatientId())
                 .setStatus("success")
                 .build();
         responseObserver.onNext(response);
