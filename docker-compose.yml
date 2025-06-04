@@ -21,8 +21,8 @@ services:
     container_name: kafka
     restart: always
     ports:
-      - "9092:9092"    # internal Kafka broker access
-      - "9094:9094"    # external access for local dev tools
+      - "9092:9092"
+      - "9094:9094"
     environment:
       - KAFKA_KRAFT_MODE=true
       - KAFKA_CFG_NODE_ID=0
@@ -35,6 +35,17 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     volumes:
       - kafka-data:/bitnami/kafka
+    networks:
+      - backend
+
+  billing-service:
+    build:
+      context: ./billing-service
+      dockerfile: Dockerfile
+    container_name: billing-service
+    ports:
+      - "4001:4001"
+      - "9001:9001"
     networks:
       - backend
 
@@ -59,40 +70,19 @@ services:
     networks:
       - backend
 
-  billing-service:
+  analytics-service:
     build:
-      context: ./billing-service
+      context: ./analytics-service
       dockerfile: Dockerfile
-    container_name: billing-service
+    container_name: analytics-service
     ports:
-      - "4001:4001"
-      - "9001:9001"
+      - "4002:4002"
+    depends_on:
+      - kafka
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     networks:
       - backend
-
-#  analytic-service:
-#    build:
-#      context: ./analytic-service
-#      dockerfile: Dockerfile
-#    container_name: analytic-service
-#    depends_on:
-#      - kafka
-#    environment:
-#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-#    networks:
-#      - backend
-#
-#  notification-service:
-#    build:
-#      context: ./notification-service
-#      dockerfile: Dockerfile
-#    container_name: notification-service
-#    depends_on:
-#      - kafka
-#    environment:
-#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-#    networks:
-#      - backend
 
 volumes:
   postgres-data:
